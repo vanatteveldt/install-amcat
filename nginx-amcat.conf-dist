@@ -1,0 +1,27 @@
+server {
+    listen 80;
+    server_name __SERVER_NAME__;
+    keepalive_timeout   70;
+
+    location /media/ {
+      alias __AMCAT_REPO__/media;
+    }
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass __NGINX_UWSGI_SOCKET__;
+        uwsgi_read_timeout 600000;
+        uwsgi_send_timeout 600000;
+        send_timeout 60000;
+        client_max_body_size 0;
+    }
+
+    location /nginx_status {
+            stub_status on;
+            access_log   off;
+        }
+}
+
+
+
+
