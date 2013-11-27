@@ -4,7 +4,7 @@ install-amcat
 This repository contains a number of useful scripts for installing AmCAT (github.com/amcat/amcat). 
 In particular, it has scripts to install the separate components of AmCAT on the same or different computers.
 
-Scripts are aimed at (and tested on) ubuntu 13.10 and rely on apt and pip to install dependencies. It uses upstart (/etc/init) scripts to install services. 
+Scripts are aimed at (and tested on) ubuntu 13.10 and rely on apt and pip to install dependencies. It uses upstart (/etc/init) scripts to install services. These scripts are supposed to be run as root.
 
 The components/scripts are:
 * install_elastic.sh. This installs elastic together with the HitCountSimilarity extension
