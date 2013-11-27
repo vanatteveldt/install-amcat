@@ -1,29 +1,34 @@
+#!/bin/bash
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CWD/base.sh
 
 set -e
 
-echo "Installing git"
-apt-get install -y git 
+echo "Installing git and pip"
+apt-get install -y git python-pip
 
 AMCAT_REPO=$AMCAT_ROOT/amcat
 if [ ! -d "$AMCAT_REPO" ]; then
     echo "Cloning repository into $AMCAT_REPO"
-    sudo -u $AMCAT_USER git clone https://github.com/amcat/amcat.git  $AMCAT_REPO
+    su $AMCAT_USER -c "git clone https://github.com/amcat/amcat.git  $AMCAT_REPO"
 fi
 
 echo "Installing amcat dependencies"
 cat $AMCAT_REPO/apt_requirements.txt | tr '\n' ' ' | xargs apt-get install -y
-sudo pip --default-timeout=100 install -r $AMCAT_REPO/pip_requirements.txt --use-mirrors 
+pip --default-timeout=100 install -r $AMCAT_REPO/pip_requirements.txt --use-mirrors 
 
 if [ "$AMCAT_DB_HOST" = "localhost" ]; then
     echo "Setting up database"
     apt-get install -y postgresql postgresql-contrib-9.1
-    set +e
-    sudo -u postgres createdb $AMCAT_DB_NAME
-    sudo -u postgres psql $AMCAT_DB_NAME -c "create user $AMCAT_DB_USER password '$AMCAT_DB_PASSWD';" 
-    set -e
-    sudo -u postgres psql -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' amcat
+    su postgres <<EOF
+      set +e
+      echo Create database $AMCAT_DB_NAME.
+      createdb $AMCAT_DB_NAME
+      echo Create  $AMCAT_DB_USER with password $AMCAT_DB_PASSWORD.
+      psql $AMCAT_DB_NAME -c "create user $AMCAT_DB_USER password '$AMCAT_DB_PASSWORD';" 
+      set -e
+      psql -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' amcat
+EOF
 
     cd $AMCAT_REPO
     PYTHONPATH=. DJANGO_DB_HOST=localhost DJANGO_DB_NAME=$AMCAT_DB_NAME \
@@ -53,7 +58,7 @@ if [ ! -e $TRG ]; then
 	-e "s#__AMCAT_DB_USER__#$AMCAT_DB_USER#" \
 	-e "s#__AMCAT_DB_NAME__#$AMCAT_DB_NAME#" \
 	-e "s#__AMCAT_DB_PASSWORD__#$AMCAT_DB_PASSWORD#" \
-	-e "s#__UWSGI_SOCKET__#$UWSGI_SOCKET#"  < $SRC > $TRG 
+	-e "s#__UWSGI_SOCKET__#$UWSGI_SOCKET#"  < $SRC > $TRG
     chmod 600 $TRG
 fi
 set +e
@@ -61,7 +66,7 @@ start amcat_wsgi
 set -e
 
 echo "Installing nginx"
-sudo apt-get install -y nginx
+apt-get install -y nginx
 
 SRC=$CWD/nginx-amcat.conf-dist
 TRG=/etc/nginx/sites-available/amcat.conf
@@ -94,11 +99,11 @@ echo "Checking upstart script at $TRG"
 if [ ! -e $TRG ]; then
     echo "Creating upstart script $TRG from $SRC"
     sed -e "s#__AMCAT_ROOT__#$AMCAT_REPO#" \
-	-e "s#__AMCAT_USER__#$AMCAT_USER#" \
-	-e "s#__AMCAT_DB_HOST__#$AMCAT_DB_HOST#" \
-	-e "s#__AMCAT_DB_USER__#$AMCAT_DB_USER#" \
-	-e "s#__AMCAT_DB_NAME__#$AMCAT_DB_NAME#" \
-	-e "s#__AMCAT_DB_PASSWORD__#$AMCAT_DB_PASSWORD#" < $SRC > $TRG
+        -e "s#__AMCAT_USER__#$AMCAT_USER#" \
+        -e "s#__AMCAT_DB_HOST__#$AMCAT_DB_HOST#" \
+        -e "s#__AMCAT_DB_USER__#$AMCAT_DB_USER#" \
+        -e "s#__AMCAT_DB_NAME__#$AMCAT_DB_NAME#" \
+        -e "s#__AMCAT_DB_PASSWORD__#$AMCAT_DB_PASSWORD#" < $SRC > $TRG
     chmod 600 $TRG
 fi
 set +e
