@@ -1,5 +1,5 @@
-install-amcat
-=============
+Installing AmCAT
+================
 
 This repository contains a number of useful scripts for installing AmCAT (github.com/amcat/amcat). 
 In particular, it has scripts to install the separate components of AmCAT on the same or different computers.
