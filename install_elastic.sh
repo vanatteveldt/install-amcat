@@ -1,8 +1,12 @@
+#!/bin/bash
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CWD/base.sh
 
+echo "Installing curl"
+apt-get install -y curl
+
 set +e
-sudo stop elastic
+stop elastic
 
 echo "Checking java install"
 which java >/dev/null
@@ -34,5 +38,6 @@ echo "Checking upstart script at $TRG"
 if [ ! -e $TRG ]; then
     echo "Creating upstart script $TRG from $SRC"
     sed -e "s#__ES_HOME__#$ELASTIC_HOME/elasticsearch-0.90.5#" -e "s#__HITCOUNT_JAR__#$ELASTIC_HOME/hitcount.jar#" < $SRC > $TRG
+    chmod 644 $TRG
 fi
-sudo start elastic
+start elastic
