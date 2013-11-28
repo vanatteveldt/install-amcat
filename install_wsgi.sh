@@ -4,8 +4,8 @@ source $CWD/base.sh
 
 set -e
 
-echo "Installing git and pip"
-apt-get install -y git python-pip
+#echo "Installing git and pip"
+#apt-get install -y git python-pip
 
 AMCAT_REPO=$AMCAT_ROOT/amcat
 if [ ! -d "$AMCAT_REPO" ]; then

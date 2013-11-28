@@ -2,8 +2,8 @@
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CWD/base.sh
 
-echo "Installing curl"
-apt-get install -y curl
+#echo "Installing curl"
+#apt-get install -y curl
 
 set +e
 stop elastic
