@@ -4,6 +4,10 @@ source $CWD/base.sh
 
 set -e
 
+# Installing packages that have not yet been included in apt-requirements.txt
+apt-get install -y  python-dev
+
+
 #echo "Installing git and pip"
 #apt-get install -y git python-pip
 
