@@ -4,13 +4,21 @@ source $CWD/base.sh
 
 set -e
 
-echo "Installing git and pip"
+# Installing packages that have not yet been included in apt-requirements.txt
+apt-get install -y  python-dev
+
+
+#echo "Installing git and pip"
 apt-get install -y git python-pip
 
+echo Download amcat in $AMCAT_ROOT
 AMCAT_REPO=$AMCAT_ROOT/amcat
 if [ ! -d "$AMCAT_REPO" ]; then
     echo "Cloning repository into $AMCAT_REPO"
-    su $AMCAT_USER -c "git clone https://github.com/amcat/amcat.git  $AMCAT_REPO"
+   git clone https://github.com/amcat/amcat.git  $AMCAT_REPO
+   chown -R $AMCAT_USER:adm $AMCAT_REPO
+   chmod -R g+ws $AMCAT_REPO
+   echo "Repository cloned"
 fi
 
 echo "Installing amcat dependencies"
@@ -67,6 +75,9 @@ set -e
 
 echo "Installing nginx"
 apt-get install -y nginx
+
+# The default nginx conflicts with amcat, so throw it out of the way
+rm -rf /etc/nginx/sites-enabled/default
 
 SRC=$CWD/nginx-amcat.conf-dist
 TRG=/etc/nginx/sites-available/amcat.conf

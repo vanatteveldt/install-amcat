@@ -4,7 +4,7 @@ server {
     keepalive_timeout   70;
 
     location /media/ {
-      alias __AMCAT_REPO__/media;
+      alias __AMCAT_REPO__/navigator/;
     }
 
     location / {
