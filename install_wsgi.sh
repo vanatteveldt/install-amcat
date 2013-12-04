@@ -15,7 +15,8 @@ echo Download amcat in $AMCAT_ROOT
 AMCAT_REPO=$AMCAT_ROOT/amcat
 if [ ! -d "$AMCAT_REPO" ]; then
     echo "Cloning repository into $AMCAT_REPO"
-   git clone https://github.com/amcat/amcat.git  $AMCAT_REPO
+#   git clone https://github.com/amcat/amcat.git  $AMCAT_REPO
+   git clone $REMOTE_AMCAT_REPO  $AMCAT_REPO
    chown -R $AMCAT_USER:adm $AMCAT_REPO
    chmod -R g+ws $AMCAT_REPO
    echo "Repository cloned"
