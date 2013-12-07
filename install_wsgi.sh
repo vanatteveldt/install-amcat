@@ -2,6 +2,14 @@
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CWD/base.sh
 
+# Create logdir 
+if [ ! -e $AMCATLOGDIR ]
+then
+  mkdir -f $AMCATLOGDIR
+  chown :$AMCATUSER $AMCATLOGDIR
+  chmod g+w $AMCATLOGDIR
+fi
+
 set -e
 
 # Installing packages that have not yet been included in apt-requirements.txt
@@ -104,6 +112,9 @@ echo "Configuring and starting celery workers"
 set +e
 stop amcat_celery
 set -e
+
+
+if [ ! -e 
 
 SRC=$CWD/amcat_celery.conf-dist
 TRG=/etc/init/amcat_celery.conf
