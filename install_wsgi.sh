@@ -5,7 +5,7 @@ source $CWD/base.sh
 # Create logdir 
 if [ ! -e $AMCAT_LOGDIR ]
 then
-  mkdir -f $AMCAT_LOGDIR
+  mkdir -p $AMCAT_LOGDIR
   chown :$AMCAT_USER $AMCAT_LOGDIR
   chmod g+w $AMCAT_LOGDIR
 fi
