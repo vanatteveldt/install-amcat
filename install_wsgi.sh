@@ -3,11 +3,11 @@ CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CWD/base.sh
 
 # Create logdir 
-if [ ! -e $AMCATLOGDIR ]
+if [ ! -e $AMCAT_LOGDIR ]
 then
-  mkdir -f $AMCATLOGDIR
-  chown :$AMCATUSER $AMCATLOGDIR
-  chmod g+w $AMCATLOGDIR
+  mkdir -f $AMCAT_LOGDIR
+  chown :$AMCATUSER $AMCAT_LOGDIR
+  chmod g+w $AMCAT_LOGDIR
 fi
 
 set -e
