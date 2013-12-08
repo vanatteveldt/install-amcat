@@ -6,7 +6,7 @@ source $CWD/base.sh
 if [ ! -e $AMCAT_LOGDIR ]
 then
   mkdir -f $AMCAT_LOGDIR
-  chown :$AMCATUSER $AMCAT_LOGDIR
+  chown :$AMCAT_USER $AMCAT_LOGDIR
   chmod g+w $AMCAT_LOGDIR
 fi
 
@@ -112,9 +112,6 @@ echo "Configuring and starting celery workers"
 set +e
 stop amcat_celery
 set -e
-
-
-if [ ! -e 
 
 SRC=$CWD/amcat_celery.conf-dist
 TRG=/etc/init/amcat_celery.conf
