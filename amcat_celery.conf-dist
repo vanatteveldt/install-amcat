@@ -1,6 +1,7 @@
 description "Celery workers for AmCAT (newseffects)"
 start on runlevel [2345]
 stop on runlevel [!2345]
+setuid amcat
 
 env AMCATROOT=__AMCAT_ROOT__
 env AMCATUSER=__AMCAT_USER__
@@ -18,4 +19,4 @@ env PYTHONPATH=__AMCAT_ROOT__
 env DJANGO_SETTINGS_MODULE=settings
 
 respawn
-exec /usr/bin/python $AMCATROOT/manage.py celery worker --concurrency=16 -l INFO > /var/log/amcat_celery.log 2>&1
+exec celery -A amcat.amcatcelery worker -l info -Q amcat > /var/log/amcat/celery.log 2>&1

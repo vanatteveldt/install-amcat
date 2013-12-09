@@ -2,8 +2,8 @@
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CWD/base.sh
 
-echo "Installing curl"
-apt-get install -y curl
+#echo "Installing curl"
+#apt-get install -y curl
 
 set +e
 stop elastic
@@ -29,6 +29,8 @@ if [ ! -d $ELASTIC_HOME/elasticsearch-0.90.5 ]; then
     curl https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.5.tar.gz  | tar xz
     wget http://amcat.vu.nl/plain/hitcount.jar
     elasticsearch-0.90.5/bin/plugin -install elasticsearch/elasticsearch-lang-python/1.2.0
+    elasticsearch-0.90.5/bin/plugin -install mobz/elasticsearch-head
+    elasticsearch-0.90.5/bin/plugin -install elasticsearch/elasticsearch-analysis-icu/1.12.0
 fi
 
 
